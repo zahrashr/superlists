@@ -15,25 +15,23 @@ class HomePageTest(TestCase):
 	def test_home_page_returns_correct_html(self):
 		request = HttpRequest()
 		response = home_page(request)
-		expected_html = render_to_string('home.html',
-			{'comments': 'yey, waktunya berlibur'}
-		)
+		expected_html = render_to_string('home.html')
 		self.assertEqual(response.content.decode(), expected_html)
 
 		#self.assertTrue(response.content.startswith(b'<html>'))
 		#self.assertIn(b'<title>To-Do lists</title>', response.content)
 		#self.assertTrue(response.content.strip().endswith(b'</html>'))
 
-	def test_home_page_can_save_a_POST_request(self):
-		request = HttpRequest()
-		request.method = 'POST'
-		request.POST['item_text'] = 'A new list item'
+	#def test_home_page_can_save_a_POST_request(self):
+		#request = HttpRequest()
+		#request.method = 'POST'
+		#request.POST['item_text'] = 'A new list item'
 
-		response = home_page(request)
+		#response = home_page(request)
 
-		self.assertEqual(Item.objects.count(), 1)
-		new_item = Item.objects.first()
-		self.assertEqual(new_item.text, 'A new list item')
+		#self.assertEqual(Item.objects.count(), 1)
+		#new_item = Item.objects.first()
+		#self.assertEqual(new_item.text, 'A new list item')
 
 		#self.assertIn('A new list item', response.content.decode())
 		#expected_html = render_to_string(
@@ -45,20 +43,20 @@ class HomePageTest(TestCase):
 		#self.assertEqual(response.status_code, 302)
 		#self.assertEqual(response['location'], '/')
 
-	def test_home_page_redirects_after_POST(self):
-		request = HttpRequest()
-		request.method = 'POST'
-		request.POST['item_text'] = 'A new list item'
+	#def test_home_page_redirects_after_POST(self):
+		#request = HttpRequest()
+		#request.method = 'POST'
+		#request.POST['item_text'] = 'A new list item'
 
-		response = home_page(request)
+		#response = home_page(request)
 
-		self.assertEqual(response.status_code, 302)
-		self.assertEqual(response['location'], '/lists/the-only-list-in-the-world/')
+		#self.assertEqual(response.status_code, 302)
+		#self.assertEqual(response['location'], '/lists/the-only-list-in-the-world/')
 
-	def test_home_page_only_saves_items_when_necessary(self):
-		request = HttpRequest()
-		home_page(request)
-		self.assertEqual(Item.objects.count(), 0)
+	#def test_home_page_only_saves_items_when_necessary(self):
+	#	request = HttpRequest()
+	#	home_page(request)
+	#	self.assertEqual(Item.objects.count(), 0)
 	
 	#def test_home_page_displays_all_list_items(self):
 	#	Item.objects.create(text='itemey 1')
@@ -70,34 +68,34 @@ class HomePageTest(TestCase):
 	#	self.assertIn('itemey 1', response.content.decode())
 	#	self.assertIn('itemey 2', response.content.decode())
 	
-	def test_todo_empty(self):
-		request = HttpRequest()
-		response = home_page(request)
+	#def test_todo_empty(self):
+	#	request = HttpRequest()
+	#	response = home_page(request)
 		
-		self.assertEqual(Item.objects.count(), 0)
-		self.assertIn('yey, waktunya berlibur', response.content.decode())
+	#	self.assertEqual(Item.objects.count(), 0)
+	#	self.assertIn('yey, waktunya berlibur', response.content.decode())
 
-	def test_todo_less_than_five(self):
-		Item.objects.create(text='itemey 1')
+	#def test_todo_less_than_five(self):
+	#	Item.objects.create(text='itemey 1')
 
-		request = HttpRequest()
-		response = home_page(request)
+	#	request = HttpRequest()
+	#	response = home_page(request)
 		
-		self.assertLess(Item.objects.count(), 5)
-		self.assertIn('sibuk tapi santai', response.content.decode())
+	#	self.assertLess(Item.objects.count(), 5)
+	#	self.assertIn('sibuk tapi santai', response.content.decode())
 
-	def test_todo_more_than_five(self):
-		Item.objects.create(text='itemey 1')
-		Item.objects.create(text='itemey 2')
-		Item.objects.create(text='itemey 3')
-		Item.objects.create(text='itemey 4')
-		Item.objects.create(text='itemey 5')
+	#def test_todo_more_than_five(self):
+	#	Item.objects.create(text='itemey 1')
+	#	Item.objects.create(text='itemey 2')
+	#	Item.objects.create(text='itemey 3')
+	#	Item.objects.create(text='itemey 4')
+	#	Item.objects.create(text='itemey 5')
 
-		request = HttpRequest()
-		response = home_page(request)
+	#	request = HttpRequest()
+	#	response = home_page(request)
 		
-		self.assertGreaterEqual(Item.objects.count(), 5)
-		self.assertIn('oh tidak', response.content.decode())
+	#	self.assertGreaterEqual(Item.objects.count(), 5)
+	#	self.assertIn('oh tidak', response.content.decode())
 		
 class ItemModelTest(TestCase):
 	
@@ -132,3 +130,25 @@ class ListViewTest(TestCase):
 		
 		self.assertContains(response, 'itemey 1')
 		self.assertContains(response, 'itemey 2')
+
+class NewListTest(TestCase):
+
+	def test_saving_a_POST_request(self):
+		self.client.post(
+			'/lists/new',
+			data={'item_text': 'A new list item'}
+		)
+
+		self.assertEqual(Item.objects.count(), 1)
+		new_item = Item.objects.first()
+		self.assertEqual(new_item.text, 'A new list item')
+
+	def test_redirects_after_POST(self):
+		response = self.client.post(
+			'/lists/new',
+			data={'item_text': 'A new list item'}
+		)
+		
+		#self.assertEqual(response.status_code, 302)
+		#self.assertEqual(response['location'], '/lists/the-only-list-in-the-world/')
+		self.assertRedirects(response, '/lists/the-only-list-in-the-world/')

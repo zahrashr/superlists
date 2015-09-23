@@ -9,8 +9,8 @@ class NewVisitorTest(LiveServerTestCase):
 		self.browser = webdriver.Firefox()
 		self.browser.implicitly_wait(3)
 
-	#def tearDown(self):
-	#	self.browser.quit()
+	def tearDown(self):
+		self.browser.quit()
 	
 	def check_for_row_in_list_table(self, row_text):
 		table = self.browser.find_element_by_id('id_list_table')
@@ -42,8 +42,8 @@ class NewVisitorTest(LiveServerTestCase):
 		inputbox.send_keys('Use peacock feathers to make a fly')
 		inputbox.send_keys(Keys.ENTER)
 
-		self.check_for_row_in_list_table('1: Buy peacock feathers')
 		self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
+		self.check_for_row_in_list_table('1: Buy peacock feathers')
 		
 		self.browser.quit()
 		self.browser = webdriver.Firefox()
@@ -70,7 +70,7 @@ class NewVisitorTest(LiveServerTestCase):
 		#self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
 		#self.assertIn('2: Use peacock feathers to make a fly', [row.text for row in rows])
 
-		self.fail('Finish the test!')
+		#self.fail('Finish the test!')
 
 #if __name__ == '__main__':
 #	unittest.main(warnings = 'ignore')
