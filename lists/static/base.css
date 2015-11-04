@@ -1,3 +1,16 @@
 #id_new_item{
 	margin-top: 2ex;
 }
+
+.container .jumbotron, .container-fluid .jumbotron {
+	background-color: #72CCE4;
+	border-radius: 0;
+}
+
+.jumbotron .h1, .jumbotron h1 {
+	color: #fff;
+}
+
+.input-lg {
+	border-radius: 0;
+}
