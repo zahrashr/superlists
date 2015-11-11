@@ -18,12 +18,13 @@ def home_page(request):
 def view_list(request, list_id):
 	#items = Item.objects.all()
 	list_ = List.objects.get(id=list_id)
-	
+	list_true = Item.objects.filter(list_id=list_id).count()	
+
 	comments = ''
 
-	if Item.objects.count()==0:
+	if list_true==0:
 		comments='yey, waktunya berlibur'
-	elif Item.objects.count()<5:
+	elif list_true<5:
 		comments='sibuk tapi santai'
 	else:
 		comments='oh tidak'
