@@ -1,7 +1,6 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 import sys
-#import unittest
 
 class FunctionalTest(StaticLiveServerTestCase):
 	@classmethod
@@ -29,7 +28,3 @@ class FunctionalTest(StaticLiveServerTestCase):
 		table = self.browser.find_element_by_id('id_list_table')
 		rows = table.find_elements_by_tag_name('tr')
 		self.assertIn(row_text, [row.text for row in rows])
-
-#if __name__ == '__main__':
-#	unittest.main(warnings = 'ignore')
-

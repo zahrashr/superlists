@@ -3,21 +3,12 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render
 from lists.models import Item, List
 
-# Create your views here.
 def home_page(request):
-	#if request.method == 'POST':
-	#	Item.objects.create(text=request.POST['item_text'])
-	#	return redirect('/lists/the-only-list-in-the-world/')
-	#return render(request, 'home.html')
-		
 	comments='yey, waktunya berlibur'
 		
-	
-	#items = Item.objects.all()
 	return render(request, 'home.html', {'comments': comments})
 
 def view_list(request, list_id):
-	#items = Item.objects.all()
 	list_ = List.objects.get(id=list_id)
 	error = None
 	list_true = Item.objects.filter(list_id=list_id).count()	
@@ -54,7 +45,4 @@ def new_list(request):
 		return render(request, 'home.html', {"error": error})
 	return redirect(list_)
 
-#def add_item(request, list_id):
-#	list_ = List.objects.get(id=list_id)
-#	Item.objects.create(text=request.POST['item_text'], list=list_)
-#	return redirect('/lists/%d/' % (list_.id,))
+
